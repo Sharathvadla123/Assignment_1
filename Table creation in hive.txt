@@ -1,0 +1,237 @@
+[cloudera@quickstart ~]$ ls -l
+total 544
+-rwxrwxr-x 1 cloudera cloudera   5387 Oct 23  2017 cloudera-manager
+-rwxrwxr-x 1 cloudera cloudera   9964 Oct 23  2017 cm_api.py
+-rw-rw-r-- 1 cloudera cloudera     84 Oct  1 02:40 cricket.csv
+drwxrwxr-x 2 cloudera cloudera   4096 Oct  7 10:24 Desktop
+drwxrwxr-x 4 cloudera cloudera   4096 Oct 23  2017 Documents
+drwxr-xr-x 2 cloudera cloudera   4096 Oct  7 10:00 Downloads
+drwxrwsr-x 9 cloudera cloudera   4096 Feb 19  2015 eclipse
+-rw-rw-r-- 1 cloudera cloudera  53655 Oct 23  2017 enterprise-deployment.json
+-rw-rw-r-- 1 cloudera cloudera  50515 Oct 23  2017 express-deployment.json
+-rwxrwxr-x 1 cloudera cloudera   5007 Oct 23  2017 kerberos
+drwxrwxr-x 2 cloudera cloudera   4096 Oct 23  2017 lib
+drwxr-xr-x 2 cloudera cloudera   4096 Aug 29 05:41 Music
+-rwxrwxr-x 1 cloudera cloudera   4228 Oct 23  2017 parcels
+drwxr-xr-x 2 cloudera cloudera   4096 Aug 29 05:41 Pictures
+drwxr-xr-x 2 cloudera cloudera   4096 Aug 29 05:41 Public
+-rw-rw-r-- 1 cloudera cloudera 360233 Oct  6 10:19 sales_order_data.csv
+drwxr-xr-x 2 cloudera cloudera   4096 Aug 29 05:41 Templates
+drwxr-xr-x 2 cloudera cloudera   4096 Aug 29 05:41 Videos
+drwxrwxr-x 4 cloudera cloudera   4096 Oct 23  2017 workspace
+[cloudera@quickstart ~]$ hdfs dfs -ls
+Found 1 items
+drwxr-xr-x   - cloudera cloudera          0 2022-09-30 11:48 xyz
+[cloudera@quickstart ~]$ hdfs dfs -ls /
+Found 10 items
+drwxr-xr-x   - cloudera supergroup          0 2022-10-07 08:03 /assignment_1
+drwxrwxrwx   - hdfs     supergroup          0 2017-10-23 09:15 /benchmarks
+drwxr-xr-x   - cloudera supergroup          0 2022-10-01 02:33 /class_2
+drwxr-xr-x   - cloudera supergroup          0 2022-10-01 02:53 /class_3
+drwxr-xr-x   - hbase    supergroup          0 2022-09-01 06:35 /hbase
+drwxr-xr-x   - cloudera supergroup          0 2022-09-30 12:08 /practice
+drwxr-xr-x   - solr     solr                0 2017-10-23 09:18 /solr
+drwxrwxrwt   - hdfs     supergroup          0 2022-08-29 05:41 /tmp
+drwxr-xr-x   - hdfs     supergroup          0 2017-10-23 09:17 /user
+drwxr-xr-x   - hdfs     supergroup          0 2017-10-23 09:17 /var
+[cloudera@quickstart ~]$ hdfs dfs -copyFromPath /home/cloudera/sales_order_data.csv /assignment_1
+-copyFromPath: Unknown command
+[cloudera@quickstart ~]$ hdfs dfs -copyFromPath /home/cloudera/sales_order_data.csv /assignment_1/
+-copyFromPath: Unknown command
+[cloudera@quickstart ~]$ hdfs dfs -copyFromPath /home/cloudera/sales_order_data.csv  /assignment_1/
+-copyFromPath: Unknown command
+[cloudera@quickstart ~]$ hdfs dfs -copyFromLocal /home/cloudera/sales_order_data.csv  /assignment_1
+[cloudera@quickstart ~]$ hdfs dfs -ls /assignment_1
+Found 1 items
+-rw-r--r--   1 cloudera supergroup     360233 2022-10-07 10:51 /assignment_1/sales_order_data.csv
+[cloudera@quickstart ~]$ hive
+
+Logging initialized using configuration in file:/etc/hive/conf.dist/hive-log4j.properties
+show WARNING: Hive CLI is deprecated and migration to Beeline is recommended.
+hive> show databases;
+OK
+championship
+default
+finance
+Time taken: 0.645 seconds, Fetched: 3 row(s)
+hive> use finance;
+OK
+Time taken: 0.04 seconds
+hive> show tables;
+OK
+Time taken: 0.057 seconds
+hive> create table sales_order_csv(
+    > ordernumber int,quantity int,priceeach float,orderlinenumber int,sales float,status string,qtr_id int,month_id int,year_id int,productline string,msrp int,productcode string,
+    > phone string,city string,state string,postalcode string,country string,territory string,contactlastname string,contactfirstname string,dealsize string)
+    > row format delimited
+    > fields terminated by ','
+    > tblproperties("skip.header.line.count"="1");
+OK
+Time taken: 0.352 seconds
+hive> load data inpath '/assignment_1/' into table sales_order_csv;
+Loading data to table finance.sales_order_csv
+Table finance.sales_order_csv stats: [numFiles=1, totalSize=360233]
+OK
+Time taken: 0.545 seconds
+hive> set hive.cli.print.header=true;
+hive> set hive.resultset.use.unique.column.names=false;
+hive> describe formatted sales_order_csv;
+OK
+col_name	data_type	comment
+# col_name            	data_type           	comment             
+	 	 
+ordernumber         	int                 	                    
+quantity            	int                 	                    
+priceeach           	float               	                    
+orderlinenumber     	int                 	                    
+sales               	float               	                    
+status              	string              	                    
+qtr_id              	int                 	                    
+month_id            	int                 	                    
+year_id             	int                 	                    
+productline         	string              	                    
+msrp                	int                 	                    
+productcode         	string              	                    
+phone               	string              	                    
+city                	string              	                    
+state               	string              	                    
+postalcode          	string              	                    
+country             	string              	                    
+territory           	string              	                    
+contactlastname     	string              	                    
+contactfirstname    	string              	                    
+dealsize            	string              	                    
+	 	 
+# Detailed Table Information	 	 
+Database:           	finance             	 
+Owner:              	cloudera            	 
+CreateTime:         	Fri Oct 07 10:54:51 PDT 2022	 
+LastAccessTime:     	UNKNOWN             	 
+Protect Mode:       	None                	 
+Retention:          	0                   	 
+Location:           	hdfs://quickstart.cloudera:8020/user/hive/warehouse/finance.db/sales_order_csv	 
+Table Type:         	MANAGED_TABLE       	 
+Table Parameters:	 	 
+	COLUMN_STATS_ACCURATE	true                
+	numFiles            	1                   
+	skip.header.line.count	1                   
+	totalSize           	360233              
+	transient_lastDdlTime	1665165335          
+	 	 
+# Storage Information	 	 
+SerDe Library:      	org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe	 
+InputFormat:        	org.apache.hadoop.mapred.TextInputFormat	 
+OutputFormat:       	org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat	 
+Compressed:         	No                  	 
+Num Buckets:        	-1                  	 
+Bucket Columns:     	[]                  	 
+Sort Columns:       	[]                  	 
+Storage Desc Params:	 	 
+	field.delim         	,                   
+	serialization.format	,                   
+Time taken: 0.179 seconds, Fetched: 51 row(s)
+hive> select * from sales_order_csv limit 5;
+OK
+ordernumber	quantity	priceeach	orderlinenumber	sales	status	qtr_id	month_id	year_id	productline	msrp	productcode	phone	city	state	postalcode	country	territory	contactlastname	contactfirstname	dealsize
+10107	30	95.7	2	2871.0	Shipped	1	2	2003	Motorcycles	95	S10_1678	2125557818	NYC	NY	10022	USA	NA	Yu	Kwai	Small
+10121	34	81.35	5	2765.9	Shipped	2	5	2003	Motorcycles	95	S10_1678	26.47.1555	Reims		51100	France	EMEA	Henriot	Paul	Small
+10134	41	94.74	2	3884.34	Shipped	3	7	2003	Motorcycles	95	S10_1678	+33 1 46 62 7555	Paris		75508	France	EMEA	Da Cunha	Daniel	Medium
+10145	45	83.26	6	3746.7	Shipped	3	8	2003	Motorcycles	95	S10_1678	6265557265	Pasadena	CA	90003	USA	NA	Young	Julie	Medium
+10159	49	100.0	14	5205.27	Shipped	4	10	2003	Motorcycles	95	S10_1678	6505551386	San Francisco	CA		USA	NA	Brown	Julie	Medium
+Time taken: 0.466 seconds, Fetched: 5 row(s)
+hive> create table sales_order_orc(
+    > ordernumber int,quantity int,priceeach float,orderlinenumber int,sales float,status string,qtr_id int,month_id int,year_id int,productline string,msrp int,productcode string,
+    > phone string,city string,state string,postalcode string,country string,territory string,contactlastname string,contactfirstname string,dealsize string)
+    > row format delimited
+    > stored as orc;
+OK
+Time taken: 0.254 seconds
+hive> insert into table sales_order_orc select * from sales_order_csv;
+Query ID = cloudera_20221007105959_d2cecdb0-eeed-4c61-afab-a18346e723c0
+Total jobs = 1
+Launching Job 1 out of 1
+Number of reduce tasks is set to 0 since there's no reduce operator
+Starting Job = job_1662039219975_0070, Tracking URL = http://quickstart.cloudera:8088/proxy/application_1662039219975_0070/
+Kill Command = /usr/lib/hadoop/bin/hadoop job  -kill job_1662039219975_0070
+Hadoop job information for Stage-1: number of mappers: 1; number of reducers: 0
+2022-10-07 10:59:22,336 Stage-1 map = 0%,  reduce = 0%
+2022-10-07 10:59:31,257 Stage-1 map = 100%,  reduce = 0%, Cumulative CPU 1.9 sec
+MapReduce Total cumulative CPU time: 1 seconds 900 msec
+Ended Job = job_1662039219975_0070
+Stage-4 is selected by condition resolver.
+Stage-3 is filtered out by condition resolver.
+Stage-5 is filtered out by condition resolver.
+Moving data to: hdfs://quickstart.cloudera:8020/user/hive/warehouse/finance.db/sales_order_orc/.hive-staging_hive_2022-10-07_10-59-05_398_6571928016513763847-1/-ext-10000
+Loading data to table finance.sales_order_orc
+Table finance.sales_order_orc stats: [numFiles=1, numRows=2823, totalSize=37548, rawDataSize=3153291]
+MapReduce Jobs Launched: 
+Stage-Stage-1: Map: 1   Cumulative CPU: 1.9 sec   HDFS Read: 367241 HDFS Write: 37634 SUCCESS
+Total MapReduce CPU Time Spent: 1 seconds 900 msec
+OK
+ordernumber	quantity	priceeach	orderlinenumber	sales	status	qtr_id	month_id	year_id	productline	msrp	productcode	phone	city	state	postalcode	country	territory	contactlastname	contactfirstname	dealsize
+Time taken: 27.181 seconds
+hive> describe formatted sales_order_orc;
+OK
+col_name	data_type	comment
+# col_name            	data_type           	comment             
+	 	 
+ordernumber         	int                 	                    
+quantity            	int                 	                    
+priceeach           	float               	                    
+orderlinenumber     	int                 	                    
+sales               	float               	                    
+status              	string              	                    
+qtr_id              	int                 	                    
+month_id            	int                 	                    
+year_id             	int                 	                    
+productline         	string              	                    
+msrp                	int                 	                    
+productcode         	string              	                    
+phone               	string              	                    
+city                	string              	                    
+state               	string              	                    
+postalcode          	string              	                    
+country             	string              	                    
+territory           	string              	                    
+contactlastname     	string              	                    
+contactfirstname    	string              	                    
+dealsize            	string              	                    
+	 	 
+# Detailed Table Information	 	 
+Database:           	finance             	 
+Owner:              	cloudera            	 
+CreateTime:         	Fri Oct 07 10:58:54 PDT 2022	 
+LastAccessTime:     	UNKNOWN             	 
+Protect Mode:       	None                	 
+Retention:          	0                   	 
+Location:           	hdfs://quickstart.cloudera:8020/user/hive/warehouse/finance.db/sales_order_orc	 
+Table Type:         	MANAGED_TABLE       	 
+Table Parameters:	 	 
+	COLUMN_STATS_ACCURATE	true                
+	numFiles            	1                   
+	numRows             	2823                
+	rawDataSize         	3153291             
+	totalSize           	37548               
+	transient_lastDdlTime	1665165572          
+	 	 
+# Storage Information	 	 
+SerDe Library:      	org.apache.hadoop.hive.ql.io.orc.OrcSerde	 
+InputFormat:        	org.apache.hadoop.hive.ql.io.orc.OrcInputFormat	 
+OutputFormat:       	org.apache.hadoop.hive.ql.io.orc.OrcOutputFormat	 
+Compressed:         	No                  	 
+Num Buckets:        	-1                  	 
+Bucket Columns:     	[]                  	 
+Sort Columns:       	[]                  	 
+Storage Desc Params:	 	 
+	serialization.format	1                   
+Time taken: 0.062 seconds, Fetched: 51 row(s)
+hive> select * from sales_order_orc limit 5;
+OK
+ordernumber	quantity	priceeach	orderlinenumber	sales	status	qtr_id	month_id	year_id	productline	msrp	productcode	phone	city	state	postalcode	country	territory	contactlastname	contactfirstname	dealsize
+10107	30	95.7	2	2871.0	Shipped	1	2	2003	Motorcycles	95	S10_1678	2125557818	NYC	NY	10022	USA	NA	Yu	Kwai	Small
+10121	34	81.35	5	2765.9	Shipped	2	5	2003	Motorcycles	95	S10_1678	26.47.1555	Reims		51100	France	EMEA	Henriot	Paul	Small
+10134	41	94.74	2	3884.34	Shipped	3	7	2003	Motorcycles	95	S10_1678	+33 1 46 62 7555	Paris		75508	France	EMEA	Da Cunha	Daniel	Medium
+10145	45	83.26	6	3746.7	Shipped	3	8	2003	Motorcycles	95	S10_1678	6265557265	Pasadena	CA	90003	USA	NA	Young	Julie	Medium
+10159	49	100.0	14	5205.27	Shipped	4	10	2003	Motorcycles	95	S10_1678	6505551386	San Francisco	CA		USA	NA	Brown	Julie	Medium
+Time taken: 0.055 seconds, Fetched: 5 row(s)
+hive> 
