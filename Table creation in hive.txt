@@ -142,7 +142,6 @@ Time taken: 0.466 seconds, Fetched: 5 row(s)
 hive> create table sales_order_orc(
     > ordernumber int,quantity int,priceeach float,orderlinenumber int,sales float,status string,qtr_id int,month_id int,year_id int,productline string,msrp int,productcode string,
     > phone string,city string,state string,postalcode string,country string,territory string,contactlastname string,contactfirstname string,dealsize string)
-    > row format delimited
     > stored as orc;
 OK
 Time taken: 0.254 seconds
